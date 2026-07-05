@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Trading Academy - Sistemas</title>
+    <style>
+        /* Variables de Color - Estética Deep Black, Puro Blanco y Dorado Metálico */
+        :root {
+            --bg-main: #000000;
+            --bg-card: #111111;
+            /* Degradado Dorado Metálico */
+            --gold-metallic: linear-gradient(90deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-flat: #dfb75c; 
+            --gold-dim: rgba(223, 183, 92, 0.1);
+            --text-bright: #ffffff; 
+            --text-muted: #aaaaaa;
+        }
+
+        /* Reseteo y Estilos Generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-bright);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navegación */
+        header {
+            border-bottom: 1px solid var(--gold-dim);
+            background-color: rgba(0, 0, 0, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-bright);
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-bright);
+            text-shadow: 0 0 8px var(--text-bright);
+        }
+
+        /* Héroe / Presentación */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-name {
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        /* Títulos de Sección Estilizados */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 50px;
+            height: 3px;
+            background: var(--gold-metallic);
+        }
+
+        /* Sección: El Fundador */
+        .about-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .about-container {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .about-image-wrapper {
+            flex-shrink: 0;
+            position: relative;
+            width: 320px;
+            height: 420px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(223, 183, 92, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #0c0c0c;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .about-content {
+            flex-grow: 1;
+        }
+
+        .about-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-flat);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .about-name {
+            font-size: 2.2rem;
+            color: var(--text-bright);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .about-text {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .highlight-item {
+            border-left: 2px solid var(--gold-flat);
+            padding-left: 1rem;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 0.2rem;
+        }
+
+        .highlight-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Contenedor de Proyectos */
+        .portfolio-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem 2rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Tarjeta de Proyecto */
+        .project-card {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        } project-card
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gold-metallic);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-flat);
+            box-shadow: 0 10px 20px rgba(223, 183, 92, 0.05);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--gold-flat);
+            border: 1px solid var(--gold-flat);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            border-image: var(--gold-metallic) 1;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-bright);
+        }
+
+        /* Etiquetas de Precios */
+        .project-price-tag {
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        .price-main {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            letter-spacing: -0.5px;
+        }
+
+        .price-condition {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: inline-block;
+            margin-left: 2px;
+        }
+
+        .price-subtext {
+            font-size: 0.8rem;
+            color: var(--gold-flat);
+            margin-top: -2px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .project-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* Dropdown para "Ver Programa" */
+        .dropdown {
+            position: relative;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .btn-dropdown-toggle {
+            display: block;
+            width: 100%;
+            background-color: transparent;
+            color: var(--text-bright);
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-dropdown-toggle:hover {
+            border-color: var(--gold-flat);
+            color: var(--gold-flat);
+            background-color: rgba(223, 183, 92, 0.02);
+        }
+
+        .btn-dropdown-toggle::after {
+            content: ' ▼';
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 5px;
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+
+        .dropdown.open .btn-dropdown-toggle::after {
+            transform: rotate(180deg);
+            color: var(--gold-flat);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            width: 100%;
+            background-color: #161616;
+            border: 1px solid rgba(223, 183, 92, 0.3);
+            border-radius: 4px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            z-index: 10;
+            display: none;
+            overflow: hidden;
+        }
+
+        .dropdown.open .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            color: #000000;
+            background: var(--gold-metallic);
+            font-weight: 600;
+            padding-left: 1.5rem;
+        }
+
+        /* Lista de especificaciones técnicas */
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-item {
+            font-size: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-bright);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Estilo interactivo para la etiqueta enlace de Mentoría */
+        a.tech-item-link {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        a.tech-item-link:hover {
+            border-color: var(--gold-flat);
+            color: #000000;
+            background: var(--gold-metallic);
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(223, 183, 92, 0.3);
+        }
+
+        /* Contenedor de Botones de Compra y Enlaces */
+        .project-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            text-align: center;
+            background-color: transparent; /* CORRECCIÓN: Evita el fondo blanco nativo en elementos <button> */
+            color: var(--text-bright);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold-flat);
+            color: var(--gold-flat);
+            background-color: rgba(223, 183, 92, 0.02);
+        }
+
+        .btn-primary {
+            flex: 1;
+            text-align: center;
+            background: var(--gold-metallic);
+            color: #000000;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            border: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(223, 183, 92, 0.2);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(253, 246, 186, 0.4);
+        }
+
+        /* Adaptabilidad móvil */
+        @media (max-width: 1200px) {
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .about-container { flex-direction: column; gap: 2rem; padding: 2rem; text-align: center; }
+            .about-image-wrapper { width: 280px; height: 370px; }
+            .about-highlights { grid-template-columns: 1fr; text-align: left; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-actions { flex-direction: column; gap: 0.5rem; }
+            .btn-primary, .btn-secondary { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación Superior -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Sistemas<span>.</span></div>
+            <nav class="nav-links">
+                <a href="#" class="active">Servicios</a>
+                <a href="https://docs.google.com/spreadsheets/d/1QZ3h3g-YxMMIXOZYQ2XmRat-2I1MMsy7kKWAOORUl1k/edit?usp=drive_web" target="_blank" rel="noopener noreferrer">Bitácora</a>
+                <a href="#">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección de Bienvenida -->
+    <section class="hero">
+        <h1><span class="brand-name">Gold Trading Academy</span></h1>
+        <p>Modelado lógico, infraestructura en la nube y optimización de sistemas financieros de alta precisión.</p>
+    </section>
+
+    <!-- Sección Perfil: El Fundador -->
+    <section class="about-section">
+        <h2 class="section-title">El Fundador</h2>
+        <div class="about-container">
+            <div class="about-image-wrapper">
+                <img class="about-image" src="FOTOSAMIR2.jpeg" alt="Samir Berrío">
+            </div>
+            <div class="about-content">
+                <div class="about-subtitle">Trader & Desarrollador Principal</div>
+                <h3 class="about-name">Samir Berrío</h3>
+                <p class="about-text">
+                    Especialista en mercados financieros y desarrollo tecnológico aplicado al trading, enfocado firmemente en la creación de valor a través de la disciplina y la consistencia. Con un sólido recorrido liderando el diseño de infraestructuras automatizadas, algoritmos inteligentes y sistemas cuantitativos avanzados, ha enfocado su carrera en transformar la teoría técnica en soluciones de alta precisión que operan de manera eficiente y asincrónica en escenarios reales.
+                </p>
+                <div class="about-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-title">Especialista en Algorítmica</div>
+                        <div class="highlight-desc">Desarrollador experto en lenguajes financieros avanzados como MQL5, Pine Script v5 y arquitectura en la nube.</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-title">Filosofía de Gestión</div>
+                        <div class="highlight-desc">Comprometido con la rigurosidad analítica, la gestión de riesgo paramétrica y la educación basada en resultados.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería de Proyectos/Servicios -->
+    <main class="portfolio-section">
+        <h2 class="section-title">Nuestras Soluciones</h2>
+        
+        <div class="projects-grid">
+
+            <!-- Tarjeta 1: Academia Trading (Educación) -->
+            <div class="project-card">
+                <div>
+                    <div class="project-tag">Educación</div>
+                    <h3 class="project-title">Academia Trading</h3>
+                    
+                    <div class="project-price-tag">
+                        <span class="price-main">49 USD</span>
+                        <span class="price-condition">/ mes</span>
+                    </div>
+
+                    <p class="project-description">Formación especializada e intensiva enfocada en la consistencia y la gestión avanzada del riesgo. Desarrolla las habilidades técnicas necesarias para dominar los mercados desde un enfoque analítico y disciplinado.</p>
+                    
+                    <div class="dropdown" id="programDropdown">
+                        <button class="btn-dropdown-toggle" onclick="toggleDropdown(event)">Ver Programa</button>
+                        <div class="dropdown-menu">
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="dropdown-item">Análisis Técnico</a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="dropdown-item">Psicología del Trading</a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="dropdown-item">Gestión de Riesgo</a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="dropdown-item">Disciplina</a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="dropdown-item">EMAs</a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="project-tech">
+                        <span class="tech-item">Estrategia</span>
+                        <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" class="tech-item tech-item-link">Mentoría 1:1</a>
+                        <span class="tech-item">Psicotrading</span>
+                    </div>
+                    <div class="project-actions">
+                        <button onclick="contactarWhatsApp(event, 'academia')" class="btn-primary" style="width: 100%; flex: none;">Inscribirse</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2: Licencia Expert Advisor (Sistemas) -->
+            <div class="project-card">
+                <div>
+                    <div class="project-tag">Sistemas</div>
+                    <h3 class="project-title">Licencia Expert Advisor</h3>
+                    
+                    <div class="project-price-tag">
+                        <span class="price-main">1200 USD</span>
+                        <span class="price-condition">Pago Único</span>
+                    </div>
+
+                    <p class="project-description">Obtén el archivo compilado ejecutable (.ex5) de nuestro bot insignia blindado por número de cuenta de MT5. Gestión de riesgo integrada y control absoluto de los parámetros en tu propia terminal.</p>
+                </div>
+                <div>
+                    <div class="project-tech">
+                        <span class="tech-item">MQL5</span>
+                        <span class="tech-item">Archivo .EX5</span>
+                        <span class="tech-item">Licencia Única</span>
+                    </div>
+                    <div class="project-actions">
+                        <button onclick="contactarWhatsApp(event, 'bot_info')" class="btn-secondary">Ficha Técnica</button>
+                        <button onclick="contactarWhatsApp(event, 'bot_compra')" class="btn-primary">Comprar Bot</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Servicio Copy Trading (Infraestructura) -->
+            <div class="project-card">
+                <div>
+                    <div class="project-tag">Infraestructura</div>
+                    <h3 class="project-title">Servicio Copy Trading</h3>
+                    
+                    <div class="project-price-tag">
+                        <span class="price-main">30 USD</span>
+                        <span class="price-condition">/ mes</span>
+                        <span class="price-subtext">+ 30% de rentabilidad de la cuenta</span>
+                    </div>
+
+                    <p class="project-description">Sincronización institucional en la nube sin instalar softwares adicionales. Las operaciones se replican de forma asincrónica en tu cuenta con latencia mínima, bajo el control de nuestra infraestructura centralizada.</p>
+                </div>
+                <div>
+                    <div class="project-tech">
+                        <span class="tech-item">FastAPI</span>
+                        <span class="tech-item">Render Cloud</span>
+                        <span class="tech-item">100% Automático</span>
+                    </div>
+                    <div class="project-actions">
+                        <a href="https://mi-api-copytrading.onrender.com/docs" target="_blank" rel="noopener noreferrer" class="btn-secondary">Panel API</a>
+                        <button onclick="contactarWhatsApp(event, 'copy')" class="btn-primary">Unirse al Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4: Indicador Premium XAU/USD (Análisis Técnico) -->
+            <div class="project-card">
+                <div>
+                    <div class="project-tag">Análisis Técnico</div>
+                    <h3 class="project-title">Indicador Premium XAU/USD</h3>
+                    
+                    <div class="project-price-tag">
+                        <span class="price-main">100 USD</span>
+                        <span class="price-condition">Acceso Perpetuo</span>
+                    </div>
+
+                    <p class="project-description">Script exclusivo para TradingView optimizado para la detección de zonas de alta probabilidad. Algoritmo personalizado con alertas en tiempo real y filtros de volumen institucional para refinar tus entradas.</p>
+                </div>
+                <div>
+                    <div class="project-tech">
+                        <span class="tech-item">Pine Script v5</span>
+                        <span class="tech-item">TradingView</span>
+                        <span class="tech-item">Invite-Only</span>
+                    </div>
+                    <div class="project-actions">
+                        <button onclick="contactarWhatsApp(event, 'indicador_demo')" class="btn-secondary">Ver Demostración</button>
+                        <button onclick="contactarWhatsApp(event, 'indicador_compra')" class="btn-primary">Adquirir Script</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer>
+        <p>&copy; 2026 <span class="brand-name" style="font-size: 0.9rem; font-weight: 700;">Gold Trading Academy</span>. Disciplina y Consistencia.</p>
+    </footer>
+
+    <!-- Scripts del Sistema -->
+    <script>
+        // 1. Control del Menú Desplegable (Dropdown)
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('programDropdown');
+            dropdown.classList.toggle('open');
+        }
+
+        window.onclick = function(event) {
+            const dropdown = document.getElementById('programDropdown');
+            if (dropdown && dropdown.classList.contains('open')) {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove('open');
+                }
+            }
+        }
+
+        // 2. FUNCIÓN DE SEGURIDAD: Ofuscación y Enrutamiento de WhatsApp
+        function contactarWhatsApp(event, servicio) {
+            event.preventDefault();
+            
+            // Reconstrucción asincrónica en memoria para evadir scrapers automáticos
+            const c_code = "57";
+            const phone_num = "3242154234"; 
+            let msg = "";
+            
+            switch(servicio) {
+                case 'academia':
+                    msg = "Hola, quiero más información sobre la Academia de Trading de Gold Trading Academy.";
+                    break;
+                case 'bot_info':
+                    msg = "Hola, me gustaría recibir la Ficha Técnica con las características lógicas del Bot.";
+                    break;
+                case 'bot_compra':
+                    msg = "Hola Samir, quiero adquirir la licencia del Bot y coordinar la activación de mi número de cuenta de MT5.";
+                    break;
+                case 'copy':
+                    msg = "Hola, estoy interesado en conectarme al servicio automatizado de Copy Trading.";
+                    break;
+                case 'indicador_demo':
+                    msg = "Hola, me gustaría ver una demostración en video o capturas del funcionamiento del Indicador Premium.";
+                    break;
+                case 'indicador_compra':
+                    msg = "Hola, quiero adquirir acceso perpetuo para el script del Indicador Premium en TradingView.";
+                    break;
+                default:
+                    msg = "Hola, me gustaría recibir soporte o información general.";
+            }
+            
+            const full_url = `https://wa.me/${c_code}${phone_num}?text=${encodeURIComponent(msg)}`;
+            
+            // Apertura limpia aislando el contexto de navegación original
+            window.open(full_url, '_blank', 'noopener,noreferrer');
+        }
+    </script>
+
+</body>
+</html>
