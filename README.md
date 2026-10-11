@@ -1,0 +1,354 @@
+[indicador-fade-extremo (3).html](https://github.com/user-attachments/files/33315624/indicador-fade-extremo.3.html)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fade Extremo 4H — Indicador XAUUSD | Gold Trading Academy</title>
+<style>
+  /* ============================================================
+     DESIGN PLAN
+     Layout: single-column editorial page — dark trading-terminal
+     hero with a live hand-drawn candlestick mockup of the signal,
+     followed by a quiet 4-step mechanism strip, a feature grid,
+     and a closing CTA band. Dark-first (trading platforms live in
+     dark mode); light theme is a toned-down daylight terminal.
+     Color: near-black graphite ground, warm gold as the brand
+     accent, neon green/red reserved ONLY for buy/sell semantics.
+     Type: Bricolage Grotesque (display, condensed/expanded swaps)
+     paired with Public Sans (body) and JetBrains Mono (data/ticks).
+     ============================================================ */
+  :root{
+    --bg: #0b0d10;
+    --surface: #13161b;
+    --surface-2: #1a1e25;
+    --fg: #f3efe4;
+    --muted: #9aa2ab;
+    --accent: #e8b23d;
+    --accent-dim: #8a6a26;
+    --buy: #18e07a;
+    --sell: #ff3b5c;
+    --border: rgba(243,239,228,0.10);
+    --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg: #eef0f4;
+      --surface: #ffffff;
+      --surface-2: #f6f7fa;
+      --fg: #15181d;
+      --muted: #5b6168;
+      --accent: #b9820a;
+      --accent-dim: #e3c37a;
+      --buy: #0f9d58;
+      --sell: #d4283f;
+      --border: rgba(15,18,21,0.10);
+      --shadow: 0 20px 50px rgba(20,20,30,0.10);
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg: #eef0f4;
+    --surface: #ffffff;
+    --surface-2: #f6f7fa;
+    --fg: #15181d;
+    --muted: #5b6168;
+    --accent: #b9820a;
+    --accent-dim: #e3c37a;
+    --buy: #0f9d58;
+    --sell: #d4283f;
+    --border: rgba(15,18,21,0.10);
+    --shadow: 0 20px 50px rgba(20,20,30,0.10);
+    color-scheme: light;
+  }
+
+  @font-face{ font-family:'Bricolage'; src:local('Bricolage Grotesque'); }
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Public Sans', -apple-system, 'Segoe UI', sans-serif;
+    padding-inline: 20px;
+    padding-block: 0;
+    line-height: 1.5;
+  }
+  .wrap{ max-width: 1040px; margin: 0 auto; }
+  a{ color: inherit; }
+
+  h1,h2,h3{
+    font-family: 'Bricolage Grotesque', 'Public Sans', sans-serif;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .mono{ font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block: 22px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px; flex-wrap: wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size: 15px; letter-spacing: 0.02em; }
+  .brand .dot{ width:10px; height:10px; border-radius:3px; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+  nav{ display:flex; gap: 22px; font-size: 14px; color: var(--muted); }
+  nav a{ text-decoration:none; }
+  nav a:hover{ color: var(--fg); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    display:grid; grid-template-columns: 1.1fr 1fr; gap: 48px;
+    padding-block: 64px 48px; align-items:center;
+  }
+  @media (max-width: 760px){ .hero{ grid-template-columns: 1fr; padding-block: 40px 28px; } }
+  .hero h1{ font-size: clamp(34px, 5vw, 54px); line-height:1.04; margin-top:14px; }
+  .hero h1 .buy{ color: var(--buy); }
+  .hero h1 .sell{ color: var(--sell); }
+  .hero p.lead{ color: var(--muted); font-size: 17px; max-width: 46ch; margin-top:18px; }
+  .cta-row{ display:flex; gap:14px; margin-top: 30px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 13px 22px; border-radius: 10px; font-weight:700; font-size:14.5px;
+    text-decoration:none; border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{ background: var(--accent); color: #141414; }
+  .btn-primary:hover{ filter: brightness(1.08); }
+  .btn-ghost{ border-color: var(--border); color: var(--fg); background: transparent; }
+  .btn-ghost:hover{ border-color: var(--accent-dim); }
+  .fineprint{ color: var(--muted); font-size: 12.5px; margin-top: 10px; }
+
+  /* ---------- Chart mock ---------- */
+  .chartcard{
+    background: var(--surface); border:1px solid var(--border); border-radius: 16px;
+    padding: 18px 16px 14px; box-shadow: var(--shadow);
+  }
+  .chartcard .chead{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .chartcard .chead .pair{ font-weight:700; font-size:14px; }
+  .chartcard .chead .tf{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); border:1px solid var(--border); padding:3px 8px; border-radius:6px; }
+  svg{ width:100%; height:auto; display:block; }
+  .chartcard .wa-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-top: 14px; padding: 12px 16px; border-radius: 10px;
+    background: #25D366; color: #07210f; font-weight:700; font-size: 14px;
+    text-decoration:none;
+  }
+  .chartcard .wa-btn:hover{ filter: brightness(1.06); }
+  .chartcard .wa-btn svg.wa-ic{ width:18px; height:18px; flex:none; }
+
+  /* ---------- Steps ---------- */
+  .steps{ padding-block: 52px; border-top: 1px solid var(--border); }
+  .steps-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 760px){ .steps-grid{ grid-template-columns: 1fr 1fr; } }
+  .step{ background: var(--surface); border:1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .step .n{ font-family:'JetBrains Mono',monospace; color: var(--accent); font-size: 13px; }
+  .step h3{ font-size: 16.5px; margin-top: 8px; }
+  .step p{ color: var(--muted); font-size: 13.8px; margin-top: 6px; }
+
+  /* ---------- Features ---------- */
+  .features{ padding-block: 52px; border-top: 1px solid var(--border); }
+  .features-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 28px; }
+  @media (max-width: 760px){ .features-grid{ grid-template-columns: 1fr; } }
+  .feat{ padding: 20px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--border); min-width:0; }
+  .feat .ic{ font-size: 20px; }
+  .feat h3{ font-size: 15.5px; margin-top: 10px; }
+  .feat p{ color: var(--muted); font-size: 13.6px; margin-top: 6px; }
+
+  /* ---------- Who ---------- */
+  .who{ padding-block: 48px; border-top:1px solid var(--border); display:grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+  @media (max-width: 760px){ .who{ grid-template-columns: 1fr; } }
+  .who p{ color: var(--muted); font-size: 15px; }
+
+  /* ---------- Final CTA ---------- */
+  .cta-band{
+    margin-block: 52px; padding: 40px 28px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--border); text-align:center;
+  }
+  .cta-band h2{ font-size: clamp(24px,3.4vw,32px); }
+  .cta-band p{ color: var(--muted); margin-top: 10px; }
+
+  footer{ border-top: 1px solid var(--border); padding-block: 26px 40px; color: var(--muted); font-size: 12.5px; }
+  footer .disclaimer{ max-width: 70ch; margin-top: 10px; line-height:1.6; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand"><span class="dot"></span>GOLD TRADING ACADEMY</div>
+    <nav>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#features">Funciones</a>
+      <a href="#cta">Obtenerlo</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Indicador para TradingView · XAUUSD</div>
+      <h1>Una etiqueta. <span class="buy">COMPRA</span> o <span class="sell">VENTA</span>. Antes de la apertura clave del día.</h1>
+      <p class="lead">Fade Extremo 4H analiza el comportamiento de la sesión temprana del oro y marca, con una señal clara en el gráfico, hacia dónde apunta el día — automático, todos los días, con historial completo.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#cta">Quiero el indicador</a>
+        <a class="btn btn-ghost" href="#como-funciona">Ver cómo funciona</a>
+      </div>
+      <div class="fineprint">Compatible con TradingView · temporalidad H1 · XAUUSD</div>
+    </div>
+
+    <div class="chartcard">
+      <div class="chead">
+        <div class="pair mono">XAUUSD</div>
+        <div class="tf">H1</div>
+      </div>
+      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="boxfill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.16"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.03"/>
+          </linearGradient>
+        </defs>
+        <!-- grid -->
+        <g stroke="var(--border)" stroke-width="1">
+          <line x1="0" y1="60" x2="360" y2="60"/>
+          <line x1="0" y1="120" x2="360" y2="120"/>
+          <line x1="0" y1="180" x2="360" y2="180"/>
+        </g>
+        <!-- range box 4-7am -->
+        <rect x="40" y="54" width="150" height="104" fill="url(#boxfill)" stroke="var(--accent-dim)" stroke-dasharray="3 3"/>
+        <text x="44" y="46" class="mono" font-size="10" fill="var(--accent)">SESION TEMPRANA</text>
+        <!-- candles 4am..7am (range) -->
+        <g stroke="var(--muted)" stroke-width="1.4">
+          <line x1="55" y1="70" x2="55" y2="150"/><rect x="49" y="95" width="12" height="32" fill="var(--surface-2)" stroke="var(--muted)"/>
+          <line x1="90" y1="60" x2="90" y2="140"/><rect x="84" y="78" width="12" height="30" fill="var(--sell)" stroke="var(--sell)"/>
+          <line x1="125" y1="80" x2="125" y2="158"/><rect x="119" y="100" width="12" height="40" fill="var(--surface-2)" stroke="var(--muted)"/>
+          <line x1="160" y1="66" x2="160" y2="146"/><rect x="154" y="90" width="12" height="24" fill="var(--sell)" stroke="var(--sell)"/>
+        </g>
+        <!-- entry candle 8am -->
+        <g>
+          <line x1="215" y1="58" x2="215" y2="150" stroke="var(--buy)" stroke-width="1.6"/>
+          <rect x="207" y="70" width="16" height="50" fill="var(--buy)" stroke="var(--buy)"/>
+        </g>
+        <!-- continuation -->
+        <g stroke="var(--muted)" stroke-width="1.4">
+          <line x1="250" y1="40" x2="250" y2="96"/><rect x="244" y="48" width="12" height="30" fill="var(--buy)" stroke="var(--buy)" opacity="0.55"/>
+          <line x1="285" y1="28" x2="285" y2="78"/><rect x="279" y="36" width="12" height="26" fill="var(--buy)" stroke="var(--buy)" opacity="0.55"/>
+          <line x1="320" y1="18" x2="320" y2="64"/><rect x="314" y="26" width="12" height="22" fill="var(--buy)" stroke="var(--buy)" opacity="0.55"/>
+        </g>
+        <!-- high/low dashed -->
+        <line x1="40" y1="60" x2="360" y2="60" stroke="#ff00e5" stroke-dasharray="4 4" stroke-width="1.2" opacity="0.7"/>
+        <line x1="40" y1="150" x2="190" y2="150" stroke="#00f0ff" stroke-dasharray="4 4" stroke-width="1.2" opacity="0.7"/>
+        <!-- label -->
+        <g>
+          <rect x="190" y="150" width="62" height="20" rx="5" fill="var(--buy)"/>
+          <text x="221" y="164" text-anchor="middle" class="mono" font-size="11" font-weight="700" fill="#06130c">COMPRA</text>
+        </g>
+      </svg>
+      <a class="wa-btn" href="https://wa.me/573003840905?text=Hola%2C%20quiero%20el%20indicador%20Fade%20Extremo%204H" target="_blank" rel="noopener">
+        <svg class="wa-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.45 1.27 4.9L2 22l5.25-1.38A9.96 9.96 0 0 0 12.04 22c5.52 0 10-4.48 10-10s-4.48-10-10-10Zm5.84 14.23c-.25.7-1.45 1.33-2 1.42-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.25-5.04-4.45-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.17 1.03-2.46.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.51.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.31.4-.45.54-.15.15-.3.31-.13.6.17.3.76 1.26 1.64 2.04 1.13 1.01 2.08 1.32 2.37 1.47.3.15.47.13.64-.08.18-.2.74-.86.93-1.16.2-.3.4-.25.66-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.13.08.75-.17 1.46Z"/></svg>
+        Escribinos por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <section class="steps" id="como-funciona">
+    <div class="eyebrow">La ventaja</div>
+    <h2 style="font-size: clamp(22px,3vw,30px); margin-top:8px;">Una metodología propia, aplicada sola todos los días</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Analiza la madrugada</h3>
+        <p>El indicador procesa el comportamiento del oro en la sesión temprana antes de que el mercado principal arranque.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Detecta el sesgo dominante</h3>
+        <p>Con una metodología propia de Gold Trading Academy, afinada y probada por el equipo — no publicada.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Marca la señal</h3>
+        <p>En el momento clave de la apertura aparece la etiqueta: roja para VENTA, verde para COMPRA.</p>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <h3>Queda en el historial</h3>
+        <p>Etiquetas y tabla resumen de señales pasadas, visibles aunque el mercado esté cerrado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="eyebrow">Qué incluye</div>
+    <h2 style="font-size: clamp(22px,3vw,30px); margin-top:8px;">Hecho para operar con reglas, no con intuición</h2>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="ic">🎯</div>
+        <h3>Señal objetiva</h3>
+        <p>Nada de interpretar velas a ojo — la etiqueta sale siempre, siguiendo la misma regla todos los días.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🗂️</div>
+        <h3>Historial completo</h3>
+        <p>Tabla con fecha, dirección y nivel de cada señal pasada, directo en el gráfico.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🔔</div>
+        <h3>Alertas nativas</h3>
+        <p>Conectá la alerta de TradingView y enterate apenas se confirme la señal del día.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🎨</div>
+        <h3>Visual en el gráfico</h3>
+        <p>Zona de análisis, referencias clave y etiquetas de color — todo configurable.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">⏱️</div>
+        <h3>Horario Colombia</h3>
+        <p>Calculado directo en hora Colombia, sin que tengas que convertir nada.</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🧩</div>
+        <h3>Respaldado por el equipo</h3>
+        <p>La misma metodología que usa Gold Trading Academy en su propio sistema automatizado.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div>
+      <div class="eyebrow">Para quién es</div>
+      <h2 style="font-size: 24px; margin-top:8px;">Traders de oro con horario definido</h2>
+    </div>
+    <p>Pensado para quienes operan XAUUSD con una rutina de apertura fija y quieren una herramienta visual, repetible y sin sesgo emocional para leer el día — ya sea para confirmar su propio análisis o para automatizar la lectura del rango de la mañana.</p>
+  </section>
+
+  <section class="cta-band" id="cta">
+    <h2>Sumate a Gold Trading Academy</h2>
+    <p>Accedé al indicador Fade Extremo 4H y empezá a ver el sesgo del oro todos los días.</p>
+    <div class="cta-row" style="justify-content:center; margin-top:22px;">
+      <a class="btn btn-primary" href="https://wa.me/573003840905?text=Hola%2C%20quiero%20el%20indicador%20Fade%20Extremo%204H" target="_blank" rel="noopener">Escribinos para obtenerlo</a>
+    </div>
+  </section>
+
+  <footer>
+    <div>© Gold Trading Academy</div>
+    <div class="disclaimer">Este indicador es una herramienta de análisis técnico y no constituye asesoría financiera ni garantía de resultados. Operar en los mercados financieros implica riesgo de pérdida de capital. Rendimientos pasados no garantizan resultados futuros.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
